@@ -1,0 +1,36 @@
+{
+  "name": "ui-glitch-hunter",
+  "version": "0.1.0",
+  "description": "Playwright temporal visual glitch detector",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
+    "build": "npm run clean && tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.test.json --noEmit",
+    "test": "playwright test",
+    "test:unit": "playwright test tests/unit",
+    "test:e2e": "playwright test tests/e2e"
+  },
+  "keywords": [
+    "playwright",
+    "visual-testing",
+    "glitch-detection"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "@playwright/test": ">=1.40.0"
+  },
+  "dependencies": {
+    "jiti": "^2.6.1",
+    "sharp": "^0.34.5"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.60.0",
+    "@types/node": "^25.0.0",
+    "typescript": "^5.9.3"
+  }
+}

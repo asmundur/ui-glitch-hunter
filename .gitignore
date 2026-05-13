@@ -1,0 +1,7 @@
+node_modules/
+dist/
+test-results/
+playwright-report/
+tests/visual-baselines/
+.DS_Store
+*.log

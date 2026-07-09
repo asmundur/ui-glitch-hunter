@@ -24,5 +24,13 @@ export default defineConfig({
         viewport: { width: 800, height: 600 },
       },
     },
+    {
+      name: "proof",
+      testMatch: /.*\/proof\/.*\.spec\.ts/,
+      use: {
+        ...devices["Desktop Chrome"],
+        viewport: { width: 800, height: 600 },
+      },
+    },
   ],
 });

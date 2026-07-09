@@ -3,6 +3,7 @@ export {
   expectNoVisualGlitches,
   runVisualGlitchCheck,
 } from "./api";
+export { analyzeVisualFrameFiles } from "./frame-files";
 export { installVisualGlitchMatcher } from "./matcher";
 export { VisualGlitchError, formatFailureMessage } from "./error";
 export {
@@ -28,6 +29,7 @@ export {
 } from "./detectors";
 export type {
   AnalysisResult,
+  AnalyzeVisualFrameFilesOptions,
   CapturedFrame,
   CaptureRun,
   CaptureMode,

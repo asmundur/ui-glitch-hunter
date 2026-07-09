@@ -13,7 +13,9 @@
     "typecheck": "tsc -p tsconfig.test.json --noEmit",
     "test": "playwright test",
     "test:unit": "playwright test tests/unit",
-    "test:e2e": "playwright test tests/e2e"
+    "test:e2e": "playwright test tests/e2e",
+    "proof": "jiti scripts/run-proof.ts",
+    "proof:external": "jiti scripts/run-proof.ts --external"
   },
   "keywords": [
     "playwright",

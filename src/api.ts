@@ -1,13 +1,12 @@
 import os from "node:os";
 import type { Page } from "@playwright/test";
+import { analyzeCaptureRun } from "./analysis";
 import { saveBaseline, loadBaseline } from "./baseline";
 import { captureRawTimeline } from "./capture";
 import { resolveRunConfig, isUpdateMode } from "./config";
-import { detectGlitches } from "./detectors";
 import { VisualGlitchError } from "./error";
 import { analyzeRawFrames } from "./image-metrics";
 import { collectMaskRects, mergeMaskRects } from "./masks";
-import { writeFailureReport } from "./report";
 import { mapTextEventsToFrames } from "./text-detector";
 import type {
   CaptureRun,
@@ -86,30 +85,5 @@ export async function runVisualGlitchCheck(
   }
 
   const baselineManifest = await loadBaseline(config, run.name);
-  const events = [
-    ...detectGlitches(frames, config.thresholds, baselineManifest, capture.fps),
-    ...textEvents,
-  ];
-
-  if (events.length === 0) {
-    return {
-      ...run,
-      name: run.name,
-      passed: true,
-      events,
-      baselineManifest,
-    };
-  }
-
-  const report = await writeFailureReport(run, events, config, baselineManifest);
-
-  return {
-    ...run,
-    name: run.name,
-    passed: false,
-    events,
-    reportJsonPath: report.reportJsonPath,
-    reportHtmlPath: report.reportHtmlPath,
-    baselineManifest,
-  };
+  return analyzeCaptureRun(run, config, baselineManifest);
 }

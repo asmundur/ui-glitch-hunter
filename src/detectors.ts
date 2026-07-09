@@ -65,27 +65,50 @@ export function detectDarkFlashes(
 ): GlitchEvent[] {
   const events: GlitchEvent[] = [];
   let nonDarkContentSeen = false;
+  let activeDarkFlash:
+    | { startFrame: number; endFrame: number; maxDarkRatio: number }
+    | undefined;
+  const nonDarkThreshold = thresholds.maxDarkFrameRatio - 0.1;
 
   for (const frame of frames) {
     const previous = frames[frame.index - 1];
+    const isDark = frame.darkRatio >= thresholds.maxDarkFrameRatio;
+    const isNonDark = frame.darkRatio < nonDarkThreshold;
     const becameDark =
       previous &&
       previous.darkRatio < thresholds.maxDarkFrameRatio - 0.03 &&
-      frame.darkRatio >= thresholds.maxDarkFrameRatio;
+      isDark;
 
-    if (nonDarkContentSeen && becameDark) {
-      events.push({
-        detector: "dark-flash",
-        message: `Dark frame ratio ${frame.darkRatio.toFixed(3)} exceeded ${thresholds.maxDarkFrameRatio}`,
+    if (!activeDarkFlash && nonDarkContentSeen && becameDark) {
+      activeDarkFlash = {
         startFrame: frame.index,
         endFrame: frame.index,
-        startTimeMs: frame.timestampMs,
-        endTimeMs: frame.timestampMs,
-        details: { darkRatio: frame.darkRatio },
-      });
+        maxDarkRatio: frame.darkRatio,
+      };
+    } else if (activeDarkFlash && isDark) {
+      activeDarkFlash.endFrame = frame.index;
+      activeDarkFlash.maxDarkRatio = Math.max(
+        activeDarkFlash.maxDarkRatio,
+        frame.darkRatio,
+      );
     }
 
-    if (frame.darkRatio < thresholds.maxDarkFrameRatio - 0.1) {
+    if (activeDarkFlash && isNonDark) {
+      const start = frames[activeDarkFlash.startFrame];
+      const end = frames[activeDarkFlash.endFrame];
+      events.push({
+        detector: "dark-flash",
+        message: `Dark frame ratio ${activeDarkFlash.maxDarkRatio.toFixed(3)} exceeded ${thresholds.maxDarkFrameRatio}`,
+        startFrame: activeDarkFlash.startFrame,
+        endFrame: activeDarkFlash.endFrame,
+        startTimeMs: start.timestampMs,
+        endTimeMs: end.timestampMs,
+        details: { darkRatio: activeDarkFlash.maxDarkRatio },
+      });
+      activeDarkFlash = undefined;
+    }
+
+    if (isNonDark) {
       nonDarkContentSeen = true;
     }
   }

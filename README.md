@@ -128,3 +128,44 @@ On failure, reports are written under
 - captured current frames
 - copied baseline frames when available
 - diff images when a baseline exists
+
+## Proof Suite
+
+The source-backed proof suite exercises a scoped subset of documented visual
+failure classes. It is evidence for those named behaviors only, not a claim of
+complete UI glitch coverage.
+
+```bash
+npm run proof
+```
+
+Runs the proof project with hosted external proofs skipped by default.
+
+```bash
+npm run proof:external
+```
+
+Runs the hosted proofs with `VISUAL_GLITCH_PROOF_EXTERNAL=1`; use this for
+manual or nightly verification rather than required PR gates.
+
+Generated proof summaries are written under `proof/results/`, which is ignored.
+Playwright and visual report artifacts are written under `test-results/`. See
+`proof/README.md` and `proof/offline-corpus.md` for source references,
+limitations, and artifact details.
+
+## Offline Frame Files
+
+Use `analyzeVisualFrameFiles` to run the same metrics, detectors, optional
+baseline comparison, and report generation against an ordered set of local image
+frames.
+
+```ts
+import { analyzeVisualFrameFiles } from "ui-glitch-hunter";
+
+const result = await analyzeVisualFrameFiles({
+  name: "offline-fixture",
+  frames: ["frame-000.png", "frame-001.png"],
+  baselineFrames: ["baseline-000.png", "baseline-001.png"],
+  outputDir: "test-results/visual-glitches",
+});
+```

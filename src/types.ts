@@ -1,6 +1,6 @@
 import type { Page, TestInfo } from "@playwright/test";
 
-export type CaptureMode = "cdp" | "screenshot";
+export type CaptureMode = "cdp" | "screenshot" | "frame-files";
 export type ImageFormat = "jpeg" | "png";
 
 export type ViewportSize = {
@@ -53,6 +53,19 @@ export type VisualGlitchOptions = Partial<CaptureConfig> & {
   masks?: string[];
   thresholds?: Partial<ThresholdConfig>;
   testInfo?: TestInfo;
+};
+
+export type AnalyzeVisualFrameFilesOptions = {
+  name: string;
+  frames: string[];
+  baselineFrames?: string[];
+  thresholds?: Partial<ThresholdConfig>;
+  outputDir?: string;
+  baselineDir?: string;
+  viewport?: ViewportSize;
+  fps?: number;
+  durationMs?: number;
+  imageFormat?: ImageFormat;
 };
 
 export type CapturedFrame = {

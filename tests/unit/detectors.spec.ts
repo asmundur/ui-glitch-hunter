@@ -60,6 +60,19 @@ test("dark flashes are detected after non-dark content", () => {
   expect(events[0].detector).toBe("dark-flash");
 });
 
+test("dark final states do not trigger transient dark flashes", () => {
+  const events = detectDarkFlashes(
+    [
+      frame(0, { darkRatio: 0.05 }),
+      frame(1, { darkRatio: 0.98 }),
+      frame(2, { darkRatio: 0.98 }),
+    ],
+    thresholds,
+  );
+
+  expect(events).toEqual([]);
+});
+
 test("unstable frames are grouped and classified", () => {
   const frames = [
     frame(0, { frameDelta: 0 }),

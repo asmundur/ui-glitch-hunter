@@ -1,0 +1,37 @@
+[
+  {
+    "id": "webdev-layout-shift-demo",
+    "kind": "third-party-hosted-page",
+    "documentedCategory": "layout shift / visual jump",
+    "sourceUrl": "https://web.dev/articles/debug-layout-shifts",
+    "exampleUrl": "https://web.dev/articles/debug-layout-shifts",
+    "externalOracle": "Browser Layout Instability API via PerformanceObserver",
+    "expectedUiGlitchHunterDetectors": [
+      "large-delta",
+      "consecutive-instability"
+    ],
+    "requiredForDefaultCi": false,
+    "notes": [
+      "Use browser layout-shift entries as an independent oracle.",
+      "The web.dev article's linked Glitch demo is no longer hosted, so the proof injects documented DOM movement into the external article page instead of depending on the dead demo host.",
+      "Record all layout-shift entries, including hadRecentInput=true. This is a visual-correlation test, not a CLS scoring test."
+    ]
+  },
+  {
+    "id": "next-themes-no-flash",
+    "kind": "third-party-hosted-page",
+    "documentedCategory": "theme flash negative control",
+    "sourceUrl": "https://github.com/pacocoursey/next-themes",
+    "exampleUrl": "https://next-themes-example.vercel.app/",
+    "externalOracle": "Project documents no flash on load",
+    "expectedUiGlitchHunterDetectors": [],
+    "forbiddenUiGlitchHunterDetectors": [
+      "blank-flash",
+      "dark-flash"
+    ],
+    "requiredForDefaultCi": false,
+    "notes": [
+      "This is a negative control. The expected result is not proof of broken UI detection; it proves the detector is not trivially over-sensitive to a documented no-flash implementation."
+    ]
+  }
+]

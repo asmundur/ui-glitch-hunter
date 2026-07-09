@@ -6,6 +6,7 @@
   },
   "include": [
     "src/**/*.ts",
+    "scripts/**/*.ts",
     "tests/**/*.ts",
     "playwright.config.ts",
     "visual-glitch.config.ts"

@@ -70,8 +70,6 @@ async function startCdpCapture(
 ): Promise<ActiveCapture> {
   const frames: RawFrame[] = [];
   let client: CDPSession | undefined;
-  let lastAcceptedAt = Number.NEGATIVE_INFINITY;
-  const minIntervalMs = 1000 / Math.max(1, config.fps);
   let markReady: () => void = () => undefined;
   const ready = new Promise<void>((resolve) => {
     markReady = resolve;
@@ -86,11 +84,6 @@ async function startCdpCapture(
       .catch(() => undefined);
 
     const timestampMs = now - startedAtMs;
-    if (timestampMs - lastAcceptedAt < minIntervalMs * 0.8) {
-      return;
-    }
-
-    lastAcceptedAt = timestampMs;
     frames.push({
       index: frames.length,
       timestampMs,

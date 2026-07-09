@@ -236,7 +236,7 @@ function renderHtmlReport(
     <div class="meta">
       <div>Test: <code>${escapeHtml(run.testTitle ?? "unknown")}</code></div>
       <div>Browser: <code>${escapeHtml(run.browserName)}</code> Viewport: <code>${run.viewport.width}x${run.viewport.height}</code> OS: <code>${run.os}</code></div>
-      <div>Mode: <code>${run.mode}</code> FPS: <code>${run.fps}</code> Duration: <code>${run.durationMs}ms</code></div>
+      <div>Mode: <code>${run.mode}</code> Configured FPS: <code>${run.fps}</code> Duration: <code>${run.durationMs}ms</code></div>
     </div>
   </header>
   <main>

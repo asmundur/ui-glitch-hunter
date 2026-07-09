@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+source "$(cd "$(dirname "$0")" && pwd)/_common.sh"
+
+"$(cd "$(dirname "$0")" && pwd)/beads-pre-commit.sh" "$@"
+
+local_pre_commit="${repo_root}/.githooks/pre-commit.local"
+if [[ -x "${local_pre_commit}" ]]; then
+  "${local_pre_commit}" "$@"
+fi

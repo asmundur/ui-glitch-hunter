@@ -1,7 +1,8 @@
 # UI Glitch Hunter
 
 Playwright Test utility for detecting transient visual glitches during page load
-and scripted interaction. It captures a short visual timeline and checks for
+and scripted interaction. In CDP mode it processes every screencast frame
+Chromium emits; screenshot mode samples at the configured FPS. It checks for
 blank flashes, dark flashes, large visual jumps, unstable frame ranges, known
 runtime error text, and optional baseline drift.
 
@@ -105,6 +106,17 @@ export default {
   masks: ["[data-visual-ignore]", ".timestamp", ".animated-spinner"],
 } satisfies VisualGlitchUserConfig;
 ```
+
+## Capture Modes
+
+`mode: "cdp"` uses Chromium's screencast stream with `everyNthFrame: 1` and
+analyzes every `Page.screencastFrame` event received from the browser. This is
+the default mode and is intended for catching glitches that would be missed by
+FPS sampling. The configured `fps` value is still recorded as metadata.
+
+`mode: "screenshot"` uses repeated Playwright screenshots and is sampled at the
+configured `fps`. It is useful as a portable fallback, but very short flashes can
+fall between samples.
 
 ## Reports
 

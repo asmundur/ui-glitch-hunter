@@ -10,6 +10,10 @@ export type ViewportSize = {
 
 export type CaptureConfig = {
   mode: CaptureMode;
+  /**
+   * Screenshot-mode sampling rate. CDP mode processes every screencast frame
+   * emitted by Chromium and keeps this value only as run metadata.
+   */
   fps: number;
   durationMs: number;
   imageFormat: ImageFormat;

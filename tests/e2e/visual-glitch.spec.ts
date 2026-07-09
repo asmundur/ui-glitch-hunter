@@ -310,6 +310,38 @@ test("CDP capture smoke test passes on a stable page", async ({ page }, testInfo
   expect(result.frames.length).toBeGreaterThan(0);
 });
 
+test("CDP capture detects a one-frame flash even when fps is low", async ({ page }, testInfo) => {
+  await setPatternPage(page);
+
+  const result = await runVisualGlitchCheck(page, {
+    name: uniqueName(testInfo, "cdp-one-frame-white-flash"),
+    mode: "cdp",
+    durationMs: 700,
+    fps: 1,
+    viewport: { width: 800, height: 600 },
+    outputDir: testInfo.outputPath("glitches"),
+    baselineDir: testInfo.outputPath("baselines"),
+    action: async () => {
+      await page.evaluate(
+        () =>
+          new Promise<void>((resolve) => {
+            requestAnimationFrame(() => {
+              document.body.dataset.state = "white";
+              requestAnimationFrame(() => {
+                document.body.dataset.state = "normal";
+                resolve();
+              });
+            });
+          }),
+      );
+    },
+  });
+
+  expect(result.frames.length).toBeGreaterThan(1);
+  expect(result.passed).toBe(false);
+  expect(result.events.some((event) => event.detector === "blank-flash")).toBe(true);
+});
+
 async function setPatternPage(page: Page): Promise<void> {
   await page.setContent(`
     <style>
